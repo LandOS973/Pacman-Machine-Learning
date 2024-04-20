@@ -76,6 +76,10 @@ public class AgentAction {
 		return _idAction;
 	}
 
+	public String toString() {
+		return nameAction;
+	}
+
 
 
 }

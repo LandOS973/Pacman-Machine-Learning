@@ -209,14 +209,14 @@ public class PacmanGame extends Game  {
 		
 		return this.pacman.get_position().getX();
 		
-	}	
+	}
 
 	
 	public int getPacmanY() {
 		
 		return this.pacman.get_position().getY();
 		
-	}	
+	}
 	
 	
 	public ArrayList<AgentAction> getLegalPacmanActions(){
@@ -489,6 +489,10 @@ public class PacmanGame extends Game  {
 	public int getNbFood() {
 		
 		return this.nbFood;
+	}
+
+	public int getNb_tour_invincible() {
+		return nb_tour_invincible;
 	}
 
 }

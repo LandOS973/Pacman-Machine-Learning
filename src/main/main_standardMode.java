@@ -24,7 +24,7 @@ public class main_standardMode {
 		///// Paramétrage à modifier ici : choix du niveau et de la stratégie
 	
 		////Choix du niveau
-		int level = 1;
+		int level = 2;
 		
 		
 		////Choix de la strategie du pacman 
@@ -51,17 +51,17 @@ public class main_standardMode {
 		if(level == 0) {
 			
 			chemin_maze = "layout/level0.lay";
-			maxTurnPacmanGame = 15;
+			maxTurnPacmanGame = 50;
 			
 		} else if(level == 1) {
 			
 			chemin_maze = "layout/level1.lay";
-			maxTurnPacmanGame = 30;
+			maxTurnPacmanGame = 100;
 			
 		} else if(level == 2) {
 			
 			chemin_maze = "layout/level2.lay";
-			maxTurnPacmanGame = 100;
+			maxTurnPacmanGame = 1000;
 		
 		}
 		
@@ -109,11 +109,11 @@ public class main_standardMode {
 
 		
 		//Nombre de simulations lancees en parallèle en mode train
-		int Ntrain = 100;
+		int Ntrain = 10;
 		
 		
 		//Nombre de simulations lancees en parallèle pour calculer la recompense moyenne en mode test
-		int Ntest = 100;
+		int Ntest = 10;
 		
 		
 		
@@ -178,6 +178,7 @@ public class main_standardMode {
 			}
 			
 			globalReward += _motor.getScore();
+			System.out.println(nbSimulations + " - " + i + " - " + _motor.getScore() + " - " + globalReward);
 			
 		}
 		

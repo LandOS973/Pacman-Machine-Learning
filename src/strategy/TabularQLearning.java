@@ -89,13 +89,12 @@ public class TabularQLearning  extends QLearningStrategy{
 					s += "3";
 				}else if(state.isGhostAtPosition(i, j)){
 					s += "4";
-				}else if(state.isWallAtPosition(i, j)){
-					s += "5";
-				}else{
+				}else if(!state.isWallAtPosition(i, j) && !state.isGumAtPosition(i, j) && !state.isCapsuleAtPosition(i, j) && !state.isGhostAtPosition(i, j) && !state.isPacmanAtPosition(i, j)){
 					s += "0";
 				}
 			}
 		}
+		s += state.getNb_tour_invincible();
 		return s;
 
 	}
@@ -103,6 +102,7 @@ public class TabularQLearning  extends QLearningStrategy{
 	public void encodeQtable(PacmanGame state) {
 		String s = encodeState(state);
 		if(!QTable.containsKey(s)){
+			System.out.println("Ajout de l'etat " + s);
 			double[] actions = new double[4];
 			for(int i = 0; i < 4; i++){
 				actions[i] = 0;
@@ -118,40 +118,54 @@ public class TabularQLearning  extends QLearningStrategy{
 	@Override
 	public AgentAction chooseAction(PacmanGame state) {
 		encodeQtable(state);
-		// system ouf la q table
+		// Affichage de la Q-table pour le débogage
 		for (Map.Entry<String, double[]> entry : QTable.entrySet()) {
 			String key = entry.getKey();
 			double[] value = entry.getValue();
 			System.out.println(key + " " + Arrays.toString(value));
 		}
 		System.out.println();
-		if(Math.random() < this.current_epsilon){
-			// choix random
-			Random r = new Random();
-			int action = r.nextInt(4);
-			AgentAction A = new AgentAction(action);
-			while (!state.isLegalMovePacman(A)) {
-				int action2 = r.nextInt(4);
-				A = new AgentAction(action2);
-			}
-			return A;
-		}else{
-			// prendre la meilleure action
+		if (Math.random() < this.current_epsilon) {
+			System.out.println("Random");
+			return chooseRandomLegalAction(state);
+		} else {
+			System.out.println("Qtable");
 			String s = encodeState(state);
 			double[] actions = QTable.get(s);
-			int index = 0;
-			double max = actions[0];
-			for(int i = 1; i < 4; i++){
-				if(actions[i] > max && state.isLegalMovePacman(new AgentAction(i))){
-					max = actions[i];
-					index = i;
+			ArrayList<AgentAction> legalActions = state.getLegalPacmanActions();
+			ArrayList<AgentAction> bestActions = new ArrayList<>();
+			double max = Double.NEGATIVE_INFINITY;
+
+			for (AgentAction action : legalActions) {
+				int actionIndex = action.get_idAction();
+				if (actions[actionIndex] > max) {
+					max = actions[actionIndex];
 				}
 			}
-			AgentAction A = new AgentAction(index);
-			return A;
+
+			for (AgentAction action : legalActions) {
+				int actionIndex = action.get_idAction();
+				if (actions[actionIndex] == max) {
+					bestActions.add(action);
+				}
+			}
+
+			if (!bestActions.isEmpty()) {
+				Random r = new Random();
+				return bestActions.get(r.nextInt(bestActions.size()));
+			} else {
+				return chooseRandomLegalAction(state);
+			}
 		}
 	}
-
+	
+	private AgentAction chooseRandomLegalAction(PacmanGame state) {
+		Random r = new Random();
+		ArrayList<AgentAction> legalActions = state.getLegalPacmanActions();
+		return legalActions.get(r.nextInt(legalActions.size()));
+	}
+	
+	
 
 
 

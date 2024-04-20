@@ -67,7 +67,7 @@ public class main_debugMode {
 		QLearningStrategy strat = null;
 
 		double gamma = 0.95;
-		double epsilon = 0.2;
+		double epsilon = 0.1;
 		
 		double learningRate;
 
@@ -86,7 +86,7 @@ public class main_debugMode {
 		}
 		
 		
-		PacmanGame _game = new PacmanGame(chemin_maze, 1000, (long) 1000);
+		PacmanGame _game = new PacmanGame(chemin_maze, 10000, (long) 50);
 		
 
 		
