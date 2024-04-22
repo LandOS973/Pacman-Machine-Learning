@@ -41,9 +41,8 @@ public class Agent implements Serializable {
 
 	
 	public void update(PacmanGame state, PacmanGame nextState, AgentAction action, double reward, boolean isFinalState) {
-			
 		this._behavior_normal.update(state, nextState, action, reward, isFinalState) ;
-	
+
 	}
 	
 	

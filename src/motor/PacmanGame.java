@@ -135,6 +135,7 @@ public class PacmanGame extends Game  {
 	
 	
 	public boolean isLegalMove(Agent agent, AgentAction action) {
+		if(agent == null) return false;
 		if (agent.is_alive()) {
 			return !_maze.isWall(agent.get_position().getX() + action.get_vx(),
 					agent.get_position().getY() + action.get_vy());
@@ -331,7 +332,7 @@ public class PacmanGame extends Game  {
 		PacmanGame state = SerializationUtils.clone(this);
 		
 		a = pacman.play(this, ghostsScarred, null);
-		if (isLegalMove(pacman, a)) {
+		if (a!= null && isLegalMove(pacman, a)) {
 			moveAgent(pacman, a);
 		}
 
@@ -494,5 +495,30 @@ public class PacmanGame extends Game  {
 	public int getNb_tour_invincible() {
 		return nb_tour_invincible;
 	}
+
+	public PacmanGame simulateAction(AgentAction action) {
+		try {
+			PacmanGame newGame = SerializationUtils.clone(this);
+			if (newGame == null || newGame.pacman == null) {
+				System.err.println("Error: Failed to clone the game or the cloned pacman is null.");
+				return null;
+			}
+	
+			// Vérifier si l'action est possible avant de déplacer l'agent
+			if (!newGame.isLegalMove(newGame.pacman, action)) {
+				System.err.println("Error: Attempted to perform an illegal move.");
+				return newGame; // Retourner le jeu non modifié
+			}
+	
+			newGame.moveAgent(newGame.pacman, action);
+			return newGame;
+		} catch (Exception e) {
+			System.err.println("Error during simulation: " + e.getMessage());
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+
 
 }

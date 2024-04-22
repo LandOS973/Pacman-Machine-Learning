@@ -11,6 +11,7 @@ import agent.PositionAgent;
 import motor.Maze;
 import motor.PacmanGame;
 import neuralNetwork.TrainExample;
+import java.util.concurrent.ConcurrentHashMap;
 
 import java.util.HashMap;
 
@@ -23,7 +24,7 @@ public class TabularQLearning  extends QLearningStrategy{
 	// avec un etat est associé un vector de double qui represente les valeurs Q pour chaque action possible
 	// la table permet d'associé un etat avec une postion
 	// stocker aussi le nombre de tour ou le pacman est invincible (quand il a mangé un super pacgom)
-	HashMap<String, double[]> QTable;
+	ConcurrentHashMap<String, double[]> QTable;
 
 
 	// S0 => etat initial [0,0,1,0] N S E O
@@ -55,7 +56,7 @@ public class TabularQLearning  extends QLearningStrategy{
 
 		System.out.println("Max number different states " + numberStates);
 
-		QTable = new HashMap<>();
+		QTable = new ConcurrentHashMap<>();
 
 	}
 
@@ -102,7 +103,6 @@ public class TabularQLearning  extends QLearningStrategy{
 	public void encodeQtable(PacmanGame state) {
 		String s = encodeState(state);
 		if(!QTable.containsKey(s)){
-			System.out.println("Ajout de l'etat " + s);
 			double[] actions = new double[4];
 			for(int i = 0; i < 4; i++){
 				actions[i] = 0;
@@ -122,14 +122,10 @@ public class TabularQLearning  extends QLearningStrategy{
 		for (Map.Entry<String, double[]> entry : QTable.entrySet()) {
 			String key = entry.getKey();
 			double[] value = entry.getValue();
-			System.out.println(key + " " + Arrays.toString(value));
 		}
-		System.out.println();
 		if (Math.random() < this.current_epsilon) {
-			System.out.println("Random");
 			return chooseRandomLegalAction(state);
 		} else {
-			System.out.println("Qtable");
 			String s = encodeState(state);
 			double[] actions = QTable.get(s);
 			ArrayList<AgentAction> legalActions = state.getLegalPacmanActions();

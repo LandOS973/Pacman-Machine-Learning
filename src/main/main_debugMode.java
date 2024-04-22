@@ -19,12 +19,12 @@ public class main_debugMode {
 		///// Paramétrage à modifier ici : choix du niveau et de la stratégie
 	
 		////Choix du niveau
-		int level = 0;
+		int level = 2;
 		
 		
 		////Choix de la strategie du pacman 
 		
-		int strategyID = 0;
+		int strategyID = 1;
 		
 		// 0 : Tabular Qlearning
 		// 1 : Approximate Qlearning with linear model
